@@ -1,7 +1,7 @@
 # Job Seeker Profile
 
 ## Personal Information
-- **Name**: Igor
+- **Name**: Marina Music
 - **Location**: Canada (Canadian resident)
 - **Seeking**: Jobs in Canada
 

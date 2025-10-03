@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "Bash(mkdir:*)",
+      "Bash(echo $env:APPDATA)",
+      "Bash(dir \"%APPDATA%\\Code\\User\")",
+      "Read(//c/Users/Marina/AppData/Roaming/Code/User/**)",
+      "Bash(choco install:*)",
+      "Bash(git submodule add:*)",
+      "Bash(git submodule:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
