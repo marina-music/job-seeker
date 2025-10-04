@@ -9,7 +9,9 @@
       "Bash(choco install:*)",
       "Bash(git submodule add:*)",
       "Bash(git submodule:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "WebFetch(domain:martinfowler.com)"
     ],
     "deny": [],
     "ask": []
