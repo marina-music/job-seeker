@@ -1,0 +1,702 @@
+# Quality Engineering YAML Schema
+# Integrated Test Requirements Specification
+# With DDD and UX References
+
+# Schema Version
+schema_version: "1.0.0"
+schema_date: "2025-10-04"
+schema_purpose: "Formal language for describing test requirements with DDD/UX integration"
+
+# Test Suite Definition
+test_suite:
+  id: string  # Unique identifier (ts_[context]_[name])
+  name: string  # Human-readable name
+  description: string  # Purpose and scope
+
+  # DDD References
+  bounded_context: string  # bc_[name] - which bounded context this tests
+
+  # Test Organization
+  categories:
+    - domain_tests: []  # Unit tests for domain layer
+    - application_tests: []  # Integration tests for application layer
+    - ui_tests: []  # Tests for UI layer
+    - end_to_end_tests: []  # Complete workflow tests
+
+  # Metadata
+  owner: string
+  tags: []
+  priority: enum [critical, high, medium, low]
+
+# Test Case Definition
+test_case:
+  id: string  # tc_[level]_[number]_[name]
+  name: string  # Clear, descriptive name
+  description: string  # What this test validates
+
+  # Test Classification
+  test_level: enum [unit, integration, system, acceptance, ui, e2e]
+  test_type: enum [functional, performance, security, usability, accessibility, reliability, maintainability]
+  test_priority: enum [critical, high, medium, low]
+
+  # DDD References (optional, when applicable)
+  ddd_references:
+    bounded_context: string  # bc_[name]
+    aggregate: string  # agg_[name]
+    aggregate_root: string  # ent_[name]
+    entity: string  # ent_[name]
+    value_object: string  # vo_[name]
+    domain_service: string  # svc_dom_[name]
+    application_service: string  # svc_app_[name]
+    repository: string  # repo_[name]
+    domain_event: string  # evt_[name]
+    factory: string  # factory_[name]
+
+  # UX References (optional, when applicable)
+  ux_references:
+    page: string  # page_[name]
+    workflow: string  # wf_[name]
+    component: string  # comp_[name] or atom_/org_[name]
+    component_type: enum [atom, molecule, organism, domain_component]
+    navigation_pattern: string
+    interaction_pattern: string
+    behavior_pattern: string
+
+  # Test Definition (BDD Style)
+  given:  # Preconditions
+    - condition: string
+      setup: string  # How to set up this condition
+
+  when:  # Actions
+    - action: string
+      parameters: {}
+
+  then:  # Expected Results
+    - expectation: string
+      verification_method: string
+
+  # Alternative: Traditional Test Steps
+  test_steps:
+    - step_number: integer
+      action: string
+      expected_result: string
+      actual_result: string  # Filled during execution
+
+  # Test Data
+  test_data_refs: []  # td_[name]
+
+  # Assertions
+  assertions:
+    - assertion_type: enum [equals, contains, exists, matches_pattern, throws_exception]
+      target: string
+      expected_value: any
+
+  # Execution
+  preconditions: []
+  postconditions: []
+  cleanup_steps: []
+
+  # Results
+  status: enum [not_run, passed, failed, blocked, skipped]
+  execution_time_ms: integer
+  failure_message: string
+
+  # Metadata
+  author: string
+  created_date: date
+  last_modified_date: date
+  automated: boolean
+  automation_framework: string  # Jest, Playwright, Cypress, etc.
+  tags: []
+
+# Test Data Definition
+test_data:
+  id: string  # td_[name]
+  name: string
+  description: string
+
+  # DDD References
+  aggregate_type: string  # Which aggregate this data represents
+  bounded_context: string
+
+  # Data Structure
+  data:
+    # Structured data matching domain model
+    # Example for candidate profile:
+    candidate:
+      id: string
+      email: string  # vo_email compliant
+      skills: []  # vo_skills compliant
+      experience_years: integer  # vo_experience_years compliant
+      location: string  # vo_location compliant
+
+  # Validation
+  satisfies_invariants: boolean
+  valid_for_contexts: []
+
+  # Metadata
+  reusable: boolean
+  tags: []
+
+# Test Scenario Definition (Behavior-Driven)
+test_scenario:
+  id: string  # ts_[name]
+  feature: string  # Feature name
+  user_story: string  # As a [role], I want [goal], So that [value]
+
+  # Scenario
+  scenario_name: string
+  scenario_description: string
+
+  # DDD/UX Context
+  bounded_contexts_involved: []
+  workflows_involved: []
+  pages_involved: []
+
+  # BDD Steps
+  given_steps: []
+  when_steps: []
+  then_steps: []
+
+  # Examples (for scenario outlines)
+  examples:
+    - input: {}
+      expected_output: {}
+
+  # Acceptance Criteria
+  acceptance_criteria: []
+
+  # Metadata
+  tags: []
+  priority: enum [critical, high, medium, low]
+
+# Test Automation Configuration
+test_automation:
+  framework: enum [jest, playwright, cypress, selenium, cucumber, pytest]
+
+  page_objects:
+    - page_id: string  # Matches UX page reference
+      class_name: string
+      locators: {}
+      actions: []
+      assertions: []
+
+  test_doubles:
+    mocks:
+      - target: string  # What to mock (repository, service, etc.)
+        mock_type: enum [stub, fake, mock, spy]
+        behavior: string
+
+  fixtures:
+    - fixture_id: string
+      data: {}
+      setup_function: string
+      teardown_function: string
+
+# Test Execution Plan
+test_execution_plan:
+  id: string
+  name: string
+  description: string
+
+  # Scope
+  test_suite_refs: []
+  test_case_refs: []
+
+  # Execution Strategy
+  execution_order: enum [sequential, parallel, priority_based]
+  max_parallel: integer
+
+  # Environment
+  environment: enum [local, ci, staging, production]
+
+  # Schedule
+  trigger: enum [on_commit, on_pr, on_merge, scheduled, manual]
+  schedule_cron: string  # If scheduled
+
+  # CI/CD Integration
+  ci_pipeline_stage: string
+
+  # Notifications
+  notify_on_failure: []  # Email addresses or Slack channels
+
+  # Timeouts
+  timeout_minutes: integer
+
+# Defect/Bug Report
+defect:
+  id: string  # BUG-[number]
+  title: string
+  description: string
+
+  # Classification
+  severity: enum [critical, high, medium, low]
+  priority: enum [p1, p2, p3, p4]
+  status: enum [new, open, in_progress, resolved, verified, closed, rejected]
+
+  # DDD/UX Context
+  ddd_references:
+    bounded_context: string
+    aggregate: string
+    value_object: string
+    domain_service: string
+
+  ux_references:
+    page: string
+    component: string
+    workflow: string
+
+  # Reproduction
+  steps_to_reproduce: []
+  expected_behavior: string
+  actual_behavior: string
+
+  # Environment
+  environment: string
+  browser: string  # If UI bug
+  os: string
+
+  # Analysis
+  root_cause: string
+  fix_description: string
+
+  # Relationships
+  related_test_case: string
+  blocks_test_cases: []
+
+  # Assignment
+  assigned_to: string
+  reported_by: string
+  reported_date: date
+  resolved_date: date
+
+# Test Metrics
+test_metrics:
+  # Coverage Metrics
+  coverage:
+    requirements_coverage:
+      total_requirements: integer
+      covered_requirements: integer
+      coverage_percentage: float  # Target: >95%
+
+    code_coverage:
+      domain_layer: float  # Target: >90%
+      application_layer: float  # Target: >85%
+      ui_layer: float  # Target: >80%
+      overall: float
+
+      by_type:
+        statement_coverage: float
+        branch_coverage: float
+        path_coverage: float
+
+    test_coverage:
+      total_test_cases: integer
+      automated_test_cases: integer
+      automation_rate: float  # Target: >70%
+
+  # Quality Metrics
+  quality:
+    defect_density: float  # Defects per KLOC, Target: <0.5
+    defect_detection_rate: float  # Target: >90%
+    defect_escape_rate: float  # Target: <10%
+
+    test_effectiveness:
+      pass_rate: float  # Target: >95%
+      average_execution_time_minutes: float  # Target: <30
+      flaky_test_count: integer  # Target: 0
+
+  # Usability Metrics (for UX)
+  usability:
+    system_usability_scale_score: integer  # SUS, Target: >75
+    task_completion_rate: float  # Target: >90%
+    average_time_on_task_minutes: float  # Target: <5 for common tasks
+
+  # Accessibility Metrics
+  accessibility:
+    wcag_level: enum [A, AA, AAA]
+    wcag_compliance_percentage: float  # Target: 100% for AA
+    axe_violations_count: integer  # Target: 0 for critical/serious
+
+  # Performance Metrics
+  performance:
+    page_load_time_ms: float  # Target: <3000
+    form_submission_time_ms: float  # Target: <1000
+    api_response_time_ms: float  # Target: <500
+
+# Test Environment
+test_environment:
+  id: string
+  name: string
+  type: enum [local, ci, staging, production]
+
+  # Infrastructure
+  database:
+    type: enum [postgresql, mysql, sqlite, h2_in_memory]
+    connection_string: string
+
+  backend:
+    url: string
+    version: string
+
+  frontend:
+    url: string
+    version: string
+
+  # External Services
+  external_services:
+    - service_name: string
+      mock_enabled: boolean
+      mock_url: string
+
+  # Test Data
+  data_reset_strategy: enum [before_each, before_suite, manual]
+  seed_data: []
+
+# Quality Characteristics Mapping (ISO 25010)
+quality_characteristics:
+  functional_suitability:
+    completeness: []  # Test cases for functional completeness
+    correctness: []  # Test cases for functional correctness
+    appropriateness: []  # Test cases for functional appropriateness
+
+  performance_efficiency:
+    time_behavior: []  # Response time tests
+    resource_utilization: []  # CPU/memory tests
+    capacity: []  # Load/volume tests
+
+  compatibility:
+    coexistence: []
+    interoperability: []
+
+  usability:
+    appropriateness_recognizability: []
+    learnability: []
+    operability: []
+    user_error_protection: []
+    user_engagement: []
+    accessibility: []  # WCAG 2.2 tests
+
+  reliability:
+    maturity: []
+    availability: []
+    fault_tolerance: []
+    recoverability: []
+
+  security:
+    confidentiality: []
+    integrity: []
+    non_repudiation: []
+    accountability: []
+    authenticity: []
+
+  maintainability:
+    modularity: []
+    reusability: []
+    analyzability: []
+    modifiability: []
+    testability: []
+
+  portability:
+    adaptability: []
+    installability: []
+    replaceability: []
+
+# Example Instances Follow Below
+# ============================================================================
+
+examples:
+  # Example 1: Unit Test for Value Object with UI Integration
+  - test_case:
+      id: "tc_unit_001_vo_email_validation"
+      name: "Email Value Object Validates Format"
+      description: "Verify that vo_email enforces email format rules"
+
+      test_level: unit
+      test_type: functional
+      test_priority: critical
+
+      ddd_references:
+        bounded_context: "bc_profile"
+        value_object: "vo_email"
+
+      ux_references:
+        component: "comp_email_input"
+        component_type: molecule
+
+      given:
+        - condition: "Email string provided"
+          setup: "Initialize test data with email strings"
+
+      when:
+        - action: "Create Email value object"
+          parameters:
+            email_string: "test@example.com"
+
+      then:
+        - expectation: "Email value object created successfully"
+          verification_method: "Assert no exception thrown"
+        - expectation: "Email value accessible"
+          verification_method: "Assert email.value == 'test@example.com'"
+
+      test_data_refs: ["td_valid_emails", "td_invalid_emails"]
+
+      automated: true
+      automation_framework: "jest"
+      author: "qa_team"
+      tags: ["unit", "value_object", "validation", "bc_profile"]
+
+  # Example 2: Integration Test for Aggregate with Page
+  - test_case:
+      id: "tc_int_002_update_candidate_profile"
+      name: "Update Candidate Profile Via Application Service"
+      description: "Verify that updating profile saves aggregate and publishes event"
+
+      test_level: integration
+      test_type: functional
+      test_priority: high
+
+      ddd_references:
+        bounded_context: "bc_profile"
+        aggregate: "agg_candidate_profile"
+        aggregate_root: "ent_candidate"
+        application_service: "svc_app_update_profile"
+        repository: "repo_candidate_profile"
+        domain_event: "evt_candidate_profile_updated"
+
+      ux_references:
+        page: "page_profile_edit"
+        workflow: "wf_update_profile"
+
+      given:
+        - condition: "Existing candidate profile in database"
+          setup: "Insert test candidate with skills=['Python', 'Java']"
+        - condition: "Updated data with new skill"
+          setup: "Prepare update DTO with skills=['Python', 'Java', 'React']"
+
+      when:
+        - action: "Call UpdateProfileService.execute()"
+          parameters:
+            candidate_id: "cand_123"
+            updated_skills: ["Python", "Java", "React"]
+
+      then:
+        - expectation: "Profile aggregate updated in database"
+          verification_method: "Query repo and assert skills include 'React'"
+        - expectation: "CandidateProfileUpdated event published"
+          verification_method: "Assert event captured with correct data"
+        - expectation: "Updated profile returned to caller"
+          verification_method: "Assert service returns updated profile"
+
+      automated: true
+      automation_framework: "jest"
+      tags: ["integration", "aggregate", "application_service", "bc_profile"]
+
+  # Example 3: E2E Test for Workflow
+  - test_case:
+      id: "tc_e2e_003_submit_application_workflow"
+      name: "Complete Submit Application Workflow"
+      description: "User applies for job from detail page through confirmation"
+
+      test_level: e2e
+      test_type: functional
+      test_priority: critical
+
+      ddd_references:
+        bounded_context: "bc_applications"
+        application_service: "svc_app_submit_application"
+        domain_event: "evt_application_submitted"
+
+      ux_references:
+        workflow: "wf_submit_application"
+        pages: ["page_job_detail", "page_application_review", "page_application_confirmation"]
+
+      test_steps:
+        - step_number: 1
+          action: "Navigate to job detail page"
+          expected_result: "Job details displayed, 'Apply' button visible"
+
+        - step_number: 2
+          action: "Click 'Apply for Job' button"
+          expected_result: "Application wizard opens, Step 1 displays job info"
+
+        - step_number: 3
+          action: "Click 'Next' to review profile"
+          expected_result: "Step 2 displays candidate profile, skills shown"
+
+        - step_number: 4
+          action: "Click 'Submit Application'"
+          expected_result: "Loading spinner appears"
+
+        - step_number: 5
+          action: "Wait for submission to complete"
+          expected_result: "Confirmation page displays with application ID"
+
+        - step_number: 6
+          action: "Verify toast notification"
+          expected_result: "Toast shows 'Application submitted successfully!'"
+
+        - step_number: 7
+          action: "Navigate to My Applications page"
+          expected_result: "New application appears with SUBMITTED status"
+
+      automated: true
+      automation_framework: "playwright"
+      tags: ["e2e", "workflow", "bc_applications", "critical_path"]
+
+  # Example 4: Acceptance Test (BDD)
+  - test_scenario:
+      id: "ts_acc_004_apply_for_job"
+      feature: "Job Application Submission"
+      user_story: "As a job seeker, I want to submit an application for a job, So that I can be considered for the position"
+
+      scenario_name: "Successful application submission"
+      scenario_description: "Candidate with complete profile applies for active job"
+
+      bounded_contexts_involved: ["bc_profile", "bc_job_catalog", "bc_applications"]
+      workflows_involved: ["wf_submit_application"]
+      pages_involved: ["page_job_detail", "page_application_review", "page_application_confirmation"]
+
+      given_steps:
+        - "Candidate logged in with complete profile"
+        - "Active job posting exists (job_id: 'job_456')"
+        - "Candidate has not yet applied for this job"
+
+      when_steps:
+        - "Candidate navigates to job detail page for 'job_456'"
+        - "Candidate clicks 'Apply for Job' button"
+        - "Candidate reviews profile information in wizard"
+        - "Candidate clicks 'Submit Application'"
+
+      then_steps:
+        - "Application created with status SUBMITTED"
+        - "ApplicationSubmitted event published with candidate_id and job_id"
+        - "Confirmation page displays with application ID"
+        - "Confirmation email sent to candidate"
+        - "Application appears in candidate's applications list"
+
+      acceptance_criteria:
+        - "Application saved to database with correct data"
+        - "Domain event triggers email notification"
+        - "UI displays success feedback"
+        - "Application trackable in applications list"
+
+      tags: ["acceptance", "bdd", "user_story", "critical"]
+      priority: critical
+
+  # Example 5: Accessibility Test
+  - test_case:
+      id: "tc_a11y_005_profile_page_wcag"
+      name: "Profile Edit Page WCAG 2.2 Level AA Compliance"
+      description: "Verify profile edit page meets accessibility standards"
+
+      test_level: ui
+      test_type: accessibility
+      test_priority: high
+
+      ux_references:
+        page: "page_profile_edit"
+
+      test_steps:
+        - step_number: 1
+          action: "Run axe accessibility scan on profile edit page"
+          expected_result: "Zero critical or serious violations"
+
+        - step_number: 2
+          action: "Test keyboard navigation"
+          expected_result: "All interactive elements reachable via Tab key"
+
+        - step_number: 3
+          action: "Test with screen reader (NVDA)"
+          expected_result: "All form fields have labels, errors announced"
+
+        - step_number: 4
+          action: "Check color contrast"
+          expected_result: "All text has contrast ratio ≥4.5:1"
+
+        - step_number: 5
+          action: "Verify ARIA attributes"
+          expected_result: "Form errors have aria-live, buttons have aria-label"
+
+      assertions:
+        - assertion_type: equals
+          target: "axe_violations.critical"
+          expected_value: 0
+        - assertion_type: equals
+          target: "axe_violations.serious"
+          expected_value: 0
+
+      automated: true
+      automation_framework: "jest-axe"
+      tags: ["accessibility", "wcag", "ui", "bc_profile"]
+
+# Schema Validation Rules
+# ============================================================================
+
+validation_rules:
+  test_case:
+    - rule: "id must follow pattern tc_[level]_[number]_[name]"
+    - rule: "test_level must be one of defined enum values"
+    - rule: "if ddd_references.value_object specified, must match vo_[name] pattern"
+    - rule: "if ux_references.page specified, must match page_[name] pattern"
+    - rule: "test_priority must be specified"
+    - rule: "at least one test step or BDD given-when-then required"
+
+  test_data:
+    - rule: "data must satisfy domain invariants if satisfies_invariants=true"
+    - rule: "data structure must match referenced aggregate structure"
+
+  defect:
+    - rule: "severity and priority must both be specified"
+    - rule: "steps_to_reproduce required"
+    - rule: "if status=resolved, fix_description required"
+
+# Schema Extension Points
+# ============================================================================
+
+extension_points:
+  custom_test_types:
+    description: "Projects can add custom test types beyond standard ones"
+    example: "mutation_testing, chaos_testing, contract_testing"
+
+  custom_ddd_patterns:
+    description: "Can reference additional DDD patterns"
+    example: "specification, policy, saga"
+
+  custom_ux_patterns:
+    description: "Can reference project-specific UX patterns"
+    example: "custom_widgets, platform_specific_components"
+
+  custom_metrics:
+    description: "Can add domain-specific quality metrics"
+    example: "match_accuracy_percentage, skills_gap_precision"
+
+# Best Practices for Using This Schema
+# ============================================================================
+
+usage_guidelines:
+  naming_conventions:
+    test_ids: "Use lowercase with underscores: tc_unit_001_email_validation"
+    references: "Use consistent prefixes: bc_, agg_, vo_, comp_, page_, wf_"
+    tags: "Use lowercase, descriptive: unit, integration, critical, bc_profile"
+
+  traceability:
+    - "Always reference DDD construct being tested"
+    - "Always reference UX element if UI test"
+    - "Link test cases to requirements/user stories"
+    - "Link defects to test cases"
+
+  automation:
+    - "Mark automated=true for all automated tests"
+    - "Specify automation framework"
+    - "Include enough detail for automation engineers"
+
+  maintenance:
+    - "Update test cases when domain model changes"
+    - "Update test cases when UI changes"
+    - "Keep tags current"
+    - "Archive obsolete tests, don't delete (for history)"
+
+# ============================================================================
+# End of QE YAML Schema v1.0.0
+# ============================================================================

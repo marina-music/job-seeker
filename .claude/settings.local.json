@@ -11,7 +11,16 @@
       "Bash(git submodule:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "WebFetch(domain:martinfowler.com)"
+      "WebFetch(domain:martinfowler.com)",
+      "Bash(git ls-tree:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:glossary.istqb.org)",
+      "WebFetch(domain:istqb.org)",
+      "WebFetch(domain:www.researchgate.net)",
+      "WebFetch(domain:dev.nemo.inf.ufes.br)",
+      "WebFetch(domain:iso25000.com)",
+      "Bash(dir:*)",
+      "Bash(git log:*)"
     ],
     "deny": [],
     "ask": []
